@@ -1,0 +1,10 @@
+<!-- quotes/templates/quotes/home.html -->
+ {% extends 'quotes/base.html' %}
+
+ {% block content %}
+        <div>
+            <h1>{{ author }}</h1>
+            <img src="{{ img_url }}" alt="image of author" width="300">
+            <p>Quote: {{ quote }}</p>
+        </div>
+{% endblock %}

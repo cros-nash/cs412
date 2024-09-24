@@ -1,0 +1,23 @@
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+<h1>All quotes in the famous mathematician list</h1>
+
+<table>
+  {% for quote in quotes %}
+  <tr>
+    <td>"{{ quote }}"</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h1>All images of the famous mathematician list</h1>
+<table>
+  {% for image in images %}
+  <tr>
+    <td><img src="{{ image }}" alt="{{ author }}"></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
