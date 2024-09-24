@@ -1,0 +1,55 @@
+body {
+    background-color: slateblue;
+    color: white;
+}
+
+div {
+    color: white;
+    border: 1px solid darkblue;
+    padding: 10px;
+    margin: 25px;
+}
+
+table, th, td {
+    vertical-align: baseline;
+    border: 1px solid darkred;
+}
+
+table {
+    width: 100%;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a:hover{
+    color: hotpink;
+}
+
+a:link {
+    color:purple;
+}
+
+a:visited {
+    color: purple;
+}
+
+p, td {
+    font-size: large;
+}
+
+h3 {
+    font-size: x-large;
+    color: firebrick;
+}
+
+h2 {
+    text-align: center;
+    color: firebrick;
+}
+
+h1 {
+    font-family: 'Courier New', monospace;
+}
