@@ -1,0 +1,60 @@
+<!-- restaurant/templates/restaurant/order.html -->
+{% extends 'restaurant/base.html' %}
+{% block content %}
+<div>
+<h1>Place an Order</h1>
+
+<form action="{% url 'confirmation' %}" method="POST">
+    {% csrf_token %}
+
+    <h3>Select your items and portion size</h3>
+
+    <input type="checkbox" name="menu_items" value="Chow Mein"> Chow Mein
+    <select name="Chow_Mein_size">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+    </select><br>
+
+    <input type="checkbox" name="menu_items" value="Fried Rice"> Fried Rice
+    <select name="Fried_Rice_size">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+    </select><br>
+
+    <input type="checkbox" name="menu_items" value="White Steamed Rice"> White Steamed Rice
+    <select name="White_Steamed_Rice_size">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+    </select><br>
+
+    <input type="checkbox" name="menu_items" value="Super Greens"> Super Greens
+    <select name="Super_Greens_size">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+    </select><br>
+
+    <h3>Daily Special</h3>
+    <p>Today's Special: {{ daily_special }}</p>
+    <input type="checkbox" name="daily_special_selected" value="yes"> Add today's special to your order<br>
+
+    <input type="hidden" name="daily_special" value="{{ daily_special }}">
+    <input type="hidden" name="daily_special_price" value="{{ daily_special_price }}">
+
+    <h3>Special Instructions</h3>
+    <textarea name="special_instructions" id=""></textarea>
+
+    <h3>Customer Information</h3>
+    Name: <input type="text" name="name"><br>
+    Phone: <input type="text" name="phone"><br>
+    Email: <input type="text" name="email"><br>
+
+    <h3>Place your order.</h3>
+    <input type="submit">
+</form>
+
+</div>
+{% endblock %}

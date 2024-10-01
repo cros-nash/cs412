@@ -1,0 +1,28 @@
+<!-- restaurant/templates/restaurant/base.html 
+ This is base page from which all other pages will inherit.
+ Put common code here, specific code in separate pages
+ -->
+ {% load static %}
+<html>
+    <head>
+        <title>Panda Express</title>
+        <!-- <link rel="stylesheet" href="/static/styles.css"> -->
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+
+    <nav>
+        <ul>
+            <!-- <a href="/restaurant/">main</a> -->
+            <!-- <a href="/restaurant/order">order</a> -->
+             <!-- use the scriptlet URL function to look up a URL by name -->
+            <a href="{% url 'main' %}">Main</a>
+            <a href="{% url 'order' %}">Order</a>
+        </ul>
+    </nav>
+
+    {% block content %}
+    <!-- put the interesting (specific stuff) here -->
+    {% endblock %}
+    </body>
+</html>
