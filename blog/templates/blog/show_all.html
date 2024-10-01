@@ -1,16 +1,26 @@
-<!-- templates/show_all.html -->
+<!-- templates/blog/show_all.html -->
+
+{% extends 'blog/base.html' %}
 <h1>Showing all Articles</h1>
 <!-- scriptlet code to display the value of the variable `articles` 
 {{ articles }}
 -->
-<div>
+{% block content %}
+<main class="grid-container">
     {% for a in articles %}
-    <div>
+    <article>
+        {% if a.image_url %}
+        <img src="{{a.image_url}}" alt="{{a.image_url}}">
+        {% endif %}
+        
+        <div>
         <h2>{{a.title}}</h2>
-        <h3>by {{a.author}} at {{a.published}}</h3>
+        <strong>by {{a.author}} at {{a.published}}</strong>
         <p>
         {{a.text}}
         </p>
-    </div>
+        </div>
+    </article>
     {% endfor %}
-<div>
+</main>
+{% endblock %}
