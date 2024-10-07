@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "formdata", # lecture app
     "restaurant", # assign4
     "blog", # lecture app
+    "mini_fb", # assign5
 ]
 
 MIDDLEWARE = [
