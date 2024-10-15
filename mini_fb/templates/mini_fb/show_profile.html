@@ -1,0 +1,39 @@
+<!-- templates/show_profile.html -->
+{% extends 'mini_fb/base.html' %}
+<h1>{{profile.fname}} {{ profile.lname }} </h1>
+{% block content %}
+<main class="grid-container">
+    
+    <profile class="featured">
+        {% if profile.image_url %}
+        <img src="{{ profile.image_url }}" alt="{{ p.fname }} {{ p.lname }}" style="width:150px; height:150px; object-fit:cover;">
+        {% endif %}
+        
+        <div>
+        <h2>{{profile.fname}} {{ profile.lname }}</h2>
+        <p>
+        {{profile.email}}
+        </p>
+        <p>
+        {{profile.city}}
+        </p>
+        <h3><a href="{% url 'create_status' profile.pk %}">Create a status message</a></h3>
+        </div>
+    </profile>
+
+    <div>
+        <h2>Status Messages:</h2>
+        <!-- Comments:
+        {{article.get_comments}} -->
+        {% for s in profile.get_status_messages %}
+        <profile>
+            <div>
+            <strong>At {{s.timestamp}}</strong>
+            <p>
+            {{s.message}}
+            </div>
+        </profile>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

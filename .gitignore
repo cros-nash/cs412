@@ -23,7 +23,7 @@ env/
 
 # Static and media files
 # staticfiles/
-# static/               # DO NOT IGNORE (needed for heroku deployment)
+static/               # DO NOT IGNORE (needed for heroku deployment)
 media/
 
 # Django cache files

@@ -8,4 +8,6 @@ class CreateCommentForm(forms.ModelForm):
     class Meta:
         '''associate this form with the Comment model; select fields.'''
         model = Comment
-        fields = ['article', 'author', 'text', ]
+        # fields = ['article', 'author', 'text', ]
+        # remove the article because we want to do this auto-magically
+        fields = ['author', 'text', ]
