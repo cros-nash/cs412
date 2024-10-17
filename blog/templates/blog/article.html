@@ -5,8 +5,8 @@
 <main class="grid-container">
     
     <article class="featured">
-        {% if article.image_url %}
-        <img src="{{article.image_url}}" alt="{{article.image_url}}">
+        {% if article.image_file.url %}
+        <img src="{{article.image_file.url}}" alt="{{article.image_file.url}}">
         {% endif %}
         
         <div>
@@ -15,12 +15,12 @@
         <p>
         {{article.text}}
         </p>
-
-        <h3><a href="{% url 'create_comment' article.pk %}">Create a comment</a></h3>
         </div>
     </article>
     <div>
     <h2>Comments</h2>
+    <h3><a href="{% url 'update_article' article.pk %}">Update Article</a></h3>
+    <h3><a href="{% url 'create_comment' article.pk %}">Create a comment</a></h3>
     <!-- Comments:
     {{article.get_comments}} -->
     {% for c in article.get_comments %}
@@ -29,6 +29,7 @@
         <strong>by {{c.author}} at {{c.published}}</strong>
         <p>
         {{c.text}}
+        <a href="{% url 'delete_comment' c.pk %}">delete</a> <!-- NEW -->
         </div>
     </article>
     {% endfor %}

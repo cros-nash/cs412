@@ -3,9 +3,9 @@
 #from django.shortcuts import render
 from typing import Any
 from django.urls import reverse
-from .models import Article
-from django.views.generic import ListView, DetailView, CreateView
-from .forms import CreateCommentForm
+from .models import Article, Comment
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .forms import CreateArticleForm, CreateCommentForm, UpdateArticleForm
 import random
 
 class ShowAllView(ListView):
@@ -71,3 +71,48 @@ class CreateCommentView(CreateView):
         '''Return the URL to redirect to after successfully submitting form.'''
         #return reverse('show_all')
         return reverse('article', kwargs={'pk': self.kwargs['pk']})
+    
+class CreateArticleView(CreateView):
+    '''A view to create a new Article and save it to the database.'''
+    form_class = CreateArticleForm
+    template_name = "blog/create_article_form.html"
+    
+    def form_valid(self, form):
+        '''
+        Handle the form submission to create a new Article object.
+        '''
+        print(f'CreateArticleView: form.cleaned_data={form.cleaned_data}')
+        # delegate work to the superclass version of this method
+        return super().form_valid(form)
+    
+class UpdateArticleView(UpdateView):
+    '''A view to update article and save it to the database.'''
+    form_class = UpdateArticleForm
+    template_name = "blog/update_article_form.html"
+    model = Article
+    
+    def form_valid(self, form):
+        '''
+        Handle the form submission to create a new Article object.
+        '''
+        print(f'UpdateArticleView: form.cleaned_data={form.cleaned_data}')
+        return super().form_valid(form)
+    
+    
+class DeleteCommentView(DeleteView):
+    '''A view to delete a comment and remove it from the database.'''
+    template_name = "blog/delete_comment_form.html"
+    model = Comment
+    context_object_name = 'comment'
+    
+    def get_success_url(self):
+        '''Return a the URL to which we should be directed after the delete.'''
+        # get the pk for this comment
+        pk = self.kwargs.get('pk')
+        comment = Comment.objects.filter(pk=pk).first() # get one object from QuerySet
+        
+        # find the article to which this Comment is related by FK
+        article = comment.article
+        
+        # reverse to show the article page
+        return reverse('article', kwargs={'pk':article.pk})
