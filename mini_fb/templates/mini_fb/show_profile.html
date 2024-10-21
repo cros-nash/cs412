@@ -18,6 +18,7 @@
         {{profile.city}}
         </p>
         <h3><a href="{% url 'create_status' profile.pk %}">Create a status message</a></h3>
+        <h3><a href="{% url 'update_profile' profile.pk %}">Update profile</a></h3>
         </div>
     </profile>
 
@@ -29,8 +30,14 @@
         <profile>
             <div>
             <strong>At {{s.timestamp}}</strong>
-            <p>
-            {{s.message}}
+            <p> {{s.message}} </p>
+            {% with images=s.get_images %}
+                {% if images %}
+                    {% for img in images %}
+                        <img src="{{ img.image_file.url }}" alt="Image associated with status"  style="width:150px; height:150px; object-fit:cover;"/>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
             </div>
         </profile>
         {% endfor %}
