@@ -22,9 +22,9 @@ env/
 # db.sqlite3-journal
 
 # Static and media files
-staticfiles/
-static/               # DO NOT IGNORE (needed for heroku deployment)
-media/
+# staticfiles/
+# static/               # DO NOT IGNORE (needed for heroku deployment)
+# media/
 
 # Django cache files
 *.log
