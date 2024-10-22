@@ -1,8 +1,8 @@
 from django.utils import timezone
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from typing import Any
-from .models import Image, Profile
-from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
+from .models import Image, Profile, StatusMessage
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusMessageForm
 from django.urls import reverse
 
 class ShowAllView(ListView):
@@ -123,3 +123,33 @@ class UpdateProfileView(UpdateView):
     def get_success_url(self) -> str:
         '''Return the URL to redirect to after successfully submitting form.'''
         return reverse('profile', kwargs={'pk': self.kwargs['pk']})
+    
+    
+class DeleteStatusMessageView(DeleteView):
+    model = StatusMessage
+    template_name = "mini_fb/delete_status_message.html"
+    context_object_name = "message"
+    
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        
+        profile = self.object.profile
+        context['profile'] = profile
+        context['current_time'] = timezone.now()
+        return context
+
+    def get_success_url(self) -> str:
+        '''Return the URL to redirect to after successfully deleting status message.'''
+        profile = self.object.profile
+        return reverse('profile', kwargs={'pk': profile.pk})
+    
+class UpdateStatusMessageView(UpdateView):
+    model = StatusMessage 
+    form_class = UpdateStatusMessageForm  
+    template_name = "mini_fb/update_status_form.html" 
+    context_object_name = "message" 
+
+    def get_success_url(self):
+        '''Return the URL to redirect to after successfully updating the status message.'''
+        profile = self.object.profile 
+        return reverse('profile', kwargs={'pk': profile.pk})

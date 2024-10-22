@@ -1,0 +1,18 @@
+<!-- mini_fb/templates/mini_fb/create_comment_form.html -->
+{% extends 'mini_fb/base.html' %}
+{% block content %}
+    <h2>Create a new status message</h2>
+    <div class="form-container">
+        <h2>Update Status Message</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Confirm Update</button>
+        </form>
+        
+        <form method="get" action="{% url 'profile' pk=message.profile.pk %}">
+            <button type="submit">Cancel</button>
+        </form>
+    </div>
+{% endblock %}
