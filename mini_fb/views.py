@@ -127,7 +127,7 @@ class UpdateProfileView(UpdateView):
     
 class DeleteStatusMessageView(DeleteView):
     model = StatusMessage
-    template_name = "mini_fb/delete_status_message.html"
+    template_name = "mini_fb/delete_status_form.html"
     context_object_name = "message"
     
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
