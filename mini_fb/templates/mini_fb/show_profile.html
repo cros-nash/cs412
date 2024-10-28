@@ -42,5 +42,22 @@
         </profile>
         {% endfor %}
     </div>
+
+    <div>
+        <h2>Friends:</h2>
+        {% if profile.get_friends %}
+            <ul>
+                {% for f in profile.get_friends %}
+                    <li>
+                        <a href="{% url 'show_profile' f.pk %}">{{ f.fname }} {{ f.lname }}</a>
+                        <p>{{ f.fname }} {{ f.lname }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>None</p>
+        {% endif %}
+    </div>
+    
 </main>
 {% endblock %}
