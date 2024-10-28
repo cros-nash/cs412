@@ -34,6 +34,14 @@ class Profile(models.Model):
 
         if not friendship_exists:
             Friend.objects.create(profile1=self, profile2=other)
+            
+    def get_friend_suggestions(self):
+        '''Return a list of possible friends for this profile.'''
+        friends = self.get_friends()
+        suggestions = Profile.objects.exclude(id__in=[friend.pk for friend in friends]).exclude(id=self.pk)
+
+        return suggestions
+
 
 class StatusMessage(models.Model):
     profile = models.ForeignKey("Profile", on_delete=models.CASCADE)

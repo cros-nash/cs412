@@ -167,3 +167,14 @@ class CreateFriendView(View):
         profile.add_friend(friend_profile)
 
         return redirect('profile', pk=profile.pk)
+    
+class ShowFriendSuggestionsView(DetailView):
+    model = Profile
+    template_name = 'mini_fb/friend_suggestions.html'
+    context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = self.get_object()
+        context['friend_suggestions'] = profile.get_friend_suggestions()
+        return context
