@@ -41,6 +41,15 @@ class Profile(models.Model):
         suggestions = Profile.objects.exclude(id__in=[friend.pk for friend in friends]).exclude(id=self.pk)
 
         return suggestions
+    
+    def get_news_feed(self):
+        '''Return a list of all StatusMessages for the profile and its friends, sorted by most recent.'''
+        friends = self.get_friends()
+        profile_ids = [self.pk] + [friend.pk for friend in friends]
+
+        news_feed = StatusMessage.objects.filter(profile_id__in=profile_ids).order_by('-timestamp')
+
+        return news_feed
 
 
 class StatusMessage(models.Model):

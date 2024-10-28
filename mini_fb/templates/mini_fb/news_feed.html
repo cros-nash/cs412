@@ -1,0 +1,23 @@
+<!-- templates/mini_fb/news_feed.html -->
+{% extends 'mini_fb/base.html' %}
+{% block content %}
+<main class="grid-container">
+    <div>
+        <h1>News Feed for {{ profile.fname }} {{ profile.lname }}</h1>
+        <a href="{% url 'profile' profile.pk %}">Back to Profile</a>
+    </div>
+
+    <ul>
+        {% for status in news_feed %}
+            <li>
+                <strong>{{ status.profile.fname }} {{ status.profile.lname }}</strong>:
+                <p>{{ status.message }}</p>
+                {% if status.profile.image_url %}
+                    <img src="{{ status.profile.image_url }}" alt="Profile Image" width="50" height="50">
+                {% endif %}
+                <p><em>{{ status.timestamp }}</em></p>
+            </li>
+        {% endfor %}
+    </ul>
+</main>
+{% endblock %}
