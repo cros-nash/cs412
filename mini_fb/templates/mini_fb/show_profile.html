@@ -49,8 +49,8 @@
             <ul>
                 {% for f in profile.get_friends %}
                     <li>
-                        <a href="{% url 'show_profile' f.pk %}">{{ f.fname }} {{ f.lname }}</a>
-                        <p>{{ f.fname }} {{ f.lname }}</p>
+                        <img src="{{ f.image_url }}" alt="Image associated with friend"  style="width:150px; height:150px; object-fit:cover;"/><br>
+                        <a href="{% url 'profile' f.pk %}">{{ f.fname }} {{ f.lname }}</a><br>
                     </li>
                 {% endfor %}
             </ul>

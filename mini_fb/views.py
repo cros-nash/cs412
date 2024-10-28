@@ -1,5 +1,6 @@
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from typing import Any
 from .models import Image, Profile, StatusMessage
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusMessageForm
@@ -153,3 +154,16 @@ class UpdateStatusMessageView(UpdateView):
         '''Return the URL to redirect to after successfully updating the status message.'''
         profile = self.object.profile 
         return reverse('profile', kwargs={'pk': profile.pk})
+
+
+class CreateFriendView(View):
+    def dispatch(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        other_pk = kwargs.get('other_pk')
+
+        profile = get_object_or_404(Profile, id=pk)
+        friend_profile = get_object_or_404(Profile, id=other_pk)
+
+        profile.add_friend(friend_profile)
+
+        return redirect('profile', pk=profile.pk)

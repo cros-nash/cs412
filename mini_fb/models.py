@@ -15,13 +15,25 @@ class Profile(models.Model):
     
     def get_friends(self):
         '''Return a list of friend's profiles associated with this profile.'''
-        friends_as_profile1 = Friend.objects.filter(profile1=self).values_list('profile2', flat=True)
+        profile1_friends = Friend.objects.filter(profile1=self).values_list('profile2', flat=True)
         
-        friends_as_profile2 = Friend.objects.filter(profile2=self).values_list('profile1', flat=True)
+        profile2_friends = Friend.objects.filter(profile2=self).values_list('profile1', flat=True)
 
-        all_friends = Profile.objects.filter(id__in=friends_as_profile1.union(friends_as_profile2))
+        all_friends = Profile.objects.filter(id__in=profile1_friends.union(profile2_friends))
 
         return list(all_friends)
+    
+    def add_friend(self, other):
+        '''Add a Friend relation for self and other, if it doesn't already exist.'''
+        if self == other:
+            return
+        
+        friendship_exists = Friend.objects.filter(
+            models.Q(profile1=self, profile2=other) | models.Q(profile1=other, profile2=self)
+        ).exists()
+
+        if not friendship_exists:
+            Friend.objects.create(profile1=self, profile2=other)
 
 class StatusMessage(models.Model):
     profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
