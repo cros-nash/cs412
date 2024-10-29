@@ -6,6 +6,7 @@ from django.urls import reverse
 from .models import Article, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import CreateArticleForm, CreateCommentForm, UpdateArticleForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 import random
 
 class ShowAllView(ListView):
@@ -13,6 +14,11 @@ class ShowAllView(ListView):
     model = Article
     template_name = 'blog/show_all.html'
     context_object_name = 'articles'
+    def dispatch(self, request):
+        '''add this method to show/debug logged in user'''
+        print(f"Logged in user: request.user={request.user}")
+        print(f"Logged in user: request.user.is_authenticated={request.user.is_authenticated}")
+        return super().dispatch(request)
     
 class RandomArticleView(DetailView):
     '''Show the details for one article.'''
@@ -31,7 +37,7 @@ class ArticlePageView(DetailView):
     template_name = 'blog/article.html'
     context_object_name = 'article'
     
-class CreateCommentView(CreateView):
+class CreateCommentView(LoginRequiredMixin, CreateView):
     '''A view to create a new comment and save it to the database.'''
     form_class = CreateCommentForm
     template_name = "blog/create_comment_form.html"
@@ -72,7 +78,7 @@ class CreateCommentView(CreateView):
         #return reverse('show_all')
         return reverse('article', kwargs={'pk': self.kwargs['pk']})
     
-class CreateArticleView(CreateView):
+class CreateArticleView(LoginRequiredMixin, CreateView):
     '''A view to create a new Article and save it to the database.'''
     form_class = CreateArticleForm
     template_name = "blog/create_article_form.html"
@@ -82,15 +88,22 @@ class CreateArticleView(CreateView):
         Handle the form submission to create a new Article object.
         '''
         print(f'CreateArticleView: form.cleaned_data={form.cleaned_data}')
-        # delegate work to the superclass version of this method
+        # find the logged in user
+        user = self.request.user
+        print(f"CreateArticleView user={user} article.user={user}")
+        # attach user to form instance (Article object):
+        form.instance.user = user
         return super().form_valid(form)
     
-class UpdateArticleView(UpdateView):
-    '''A view to update article and save it to the database.'''
+class UpdateArticleView(LoginRequiredMixin, UpdateView):
+    '''A view to update an Article and save it to the database.'''
     form_class = UpdateArticleForm
     template_name = "blog/update_article_form.html"
-    model = Article
-    
+    model = Article ## add this model and the QuerySet will automatically find instance by PK
+    context_object_name = "article"
+    def get_login_url(self) -> str:
+        '''Return the URL to the login page.'''
+        return reverse('login')
     def form_valid(self, form):
         '''
         Handle the form submission to create a new Article object.
@@ -112,7 +125,7 @@ class DeleteCommentView(DeleteView):
         comment = Comment.objects.filter(pk=pk).first() # get one object from QuerySet
         
         # find the article to which this Comment is related by FK
-        article = comment.article
+        article = comment.article # type: ignore
         
         # reverse to show the article page
         return reverse('article', kwargs={'pk':article.pk})

@@ -10,10 +10,24 @@
             <h1>Blog</h1>
             <nav>
                 <ul>
+                    <!-- URLs that do not depend on authentication status -->
                     <li><a href="{% url 'show_all' %}">Show All</a></li>
                     <li><a href="{% url 'random' %}">Random</a></li>
-                    <li><a href="{% url 'create_article' %}">Create Article </a></li>
+                    <!-- URLs that depend on authentication status -->
+                    {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'create_article' %}">Create Article</a></li>
+                        <li><a href="{% url 'logout' %}">Log out</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Log in</a></li>
+                    {% endif %}
                 </ul>
+                
+                <!-- show who's logged in -->
+                {% if request.user.is_authenticated %}
+                    Logged in user: {{ request.user }}.
+                {% else %}
+                    Not logged in.
+                {% endif %}
             </nav>
         </header>
     
