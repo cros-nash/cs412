@@ -42,7 +42,6 @@ class CreateProfileView(LoginRequiredMixin, CreateView):
         self.object = form.save()
         print(self.object.pk)  # Debugging print statement
         return super().form_valid(form)
-
     
     def get_success_url(self) -> str:
         '''Return the URL to redirect to after successfully submitting the form.'''
@@ -71,6 +70,10 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
         context['profile'] = profile
         context['current_time'] = timezone.now()
         return context
+    
+    def get_login_url(self) -> str:
+        '''Return the URL to the login page.'''
+        return reverse('login')
     
     def form_valid(self, form):
         sm = form.save(commit=False)
@@ -126,6 +129,9 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
         '''Return the URL to redirect to after successfully submitting form.'''
         return reverse('profile', kwargs={'pk': self.kwargs['pk']})
     
+    def get_login_url(self) -> str:
+        '''Return the URL to the login page.'''
+        return reverse('login')
     
 class DeleteStatusMessageView(LoginRequiredMixin, DeleteView):
     model = StatusMessage
@@ -145,6 +151,9 @@ class DeleteStatusMessageView(LoginRequiredMixin, DeleteView):
         profile = self.object.profile
         return reverse('profile', kwargs={'pk': profile.pk})
     
+    def get_login_url(self) -> str:
+        '''Return the URL to the login page.'''
+        return reverse('login')
 class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
     model = StatusMessage 
     form_class = UpdateStatusMessageForm  
@@ -156,6 +165,9 @@ class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
         profile = self.object.profile 
         return reverse('profile', kwargs={'pk': profile.pk})
 
+    def get_login_url(self) -> str:
+        '''Return the URL to the login page.'''
+        return reverse('login')
 
 class CreateFriendView(LoginRequiredMixin, View):
     def dispatch(self, request, *args, **kwargs):
@@ -169,6 +181,9 @@ class CreateFriendView(LoginRequiredMixin, View):
 
         return redirect('profile', pk=profile.pk)
     
+    def get_login_url(self) -> str:
+        '''Return the URL to the login page.'''
+        return reverse('login')
 class ShowFriendSuggestionsView(DetailView):
     model = Profile
     template_name = 'mini_fb/friend_suggestions.html'
