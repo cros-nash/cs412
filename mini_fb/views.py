@@ -5,6 +5,7 @@ from typing import Any
 from .models import Image, Profile, StatusMessage
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusMessageForm
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class ShowAllView(ListView):
     '''Create a subclass of ListView to display all mini_fb profiles.'''
@@ -32,7 +33,7 @@ class ShowProfileView(DetailView):
         context['current_time'] = timezone.now()
         return context
     
-class CreateProfileView(CreateView):
+class CreateProfileView(LoginRequiredMixin, CreateView):
     '''A view to create a new profile and save it to the database.'''
     form_class = CreateProfileForm
     template_name = "mini_fb/create_profile_form.html"
@@ -55,7 +56,7 @@ class CreateProfileView(CreateView):
         context['current_time'] = timezone.now()
         return context
     
-class CreateStatusMessageView(CreateView):
+class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     '''A view to create a new comment and save it to the database.'''
     form_class = CreateStatusMessageForm
     template_name = "mini_fb/create_status_form.html"
@@ -105,7 +106,7 @@ class CreateStatusMessageView(CreateView):
         return reverse('profile', kwargs={'pk': self.kwargs['pk']})
     
     
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = UpdateProfileForm
     template_name = "mini_fb/update_profile_form.html"
@@ -126,7 +127,7 @@ class UpdateProfileView(UpdateView):
         return reverse('profile', kwargs={'pk': self.kwargs['pk']})
     
     
-class DeleteStatusMessageView(DeleteView):
+class DeleteStatusMessageView(LoginRequiredMixin, DeleteView):
     model = StatusMessage
     template_name = "mini_fb/delete_status_form.html"
     context_object_name = "message"
@@ -144,7 +145,7 @@ class DeleteStatusMessageView(DeleteView):
         profile = self.object.profile
         return reverse('profile', kwargs={'pk': profile.pk})
     
-class UpdateStatusMessageView(UpdateView):
+class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
     model = StatusMessage 
     form_class = UpdateStatusMessageForm  
     template_name = "mini_fb/update_status_form.html" 
@@ -156,7 +157,7 @@ class UpdateStatusMessageView(UpdateView):
         return reverse('profile', kwargs={'pk': profile.pk})
 
 
-class CreateFriendView(View):
+class CreateFriendView(LoginRequiredMixin, View):
     def dispatch(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         other_pk = kwargs.get('other_pk')

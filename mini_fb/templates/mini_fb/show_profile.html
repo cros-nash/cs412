@@ -17,10 +17,12 @@
         <p>
         {{profile.city}}
         </p>
-        <h3><a href="{% url 'create_status' profile.pk %}">Create a status message</a></h3>
-        <h3><a href="{% url 'update_profile' profile.pk %}">Update profile</a></h3>
-        <h3><a href="{% url 'friend_suggestions' profile.pk %}">View Friend Suggestions</a></h3>
-        <h3><a href="{% url 'news_feed' profile.pk %}">View News Feed</a></h3>
+        {% if request.user.is_authenticated %}
+            <h3><a href="{% url 'create_status' profile.pk %}">Create a status message</a></h3>
+            <h3><a href="{% url 'update_profile' profile.pk %}">Update profile</a></h3>
+            <h3><a href="{% url 'friend_suggestions' profile.pk %}">View Friend Suggestions</a></h3>
+            <h3><a href="{% url 'news_feed' profile.pk %}">View News Feed</a></h3>
+        {% endif %}
         </div>
     </profile>
 
@@ -31,7 +33,7 @@
         {% for s in profile.get_status_messages %}
         <profile>
             <div>
-            <strong>At {{s.timestamp}}</strong> <a href="{% url 'delete_status' s.pk %}">Delete</a>  <a href="{% url 'update_status' s.pk %}">Update</a>
+            <strong>At {{s.timestamp}}</strong> {% if request.user.is_authenticated %} <a href="{% url 'delete_status' s.pk %}">Delete</a>  <a href="{% url 'update_status' s.pk %}">Update</a> {% endif %}
             <p> {{s.message}} </p>
             {% with images=s.get_images %}
                 {% if images %}

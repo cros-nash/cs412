@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Profile(models.Model):
     # data attributes of a Profile:
@@ -7,6 +8,7 @@ class Profile(models.Model):
     city = models.TextField(blank=False)
     email = models.TextField(blank=False)
     image_url = models.URLField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def get_status_messages(self):
         '''Return all of the status messages about this profile.'''
