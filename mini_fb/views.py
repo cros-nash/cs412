@@ -6,6 +6,8 @@ from .models import Image, Profile, StatusMessage
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusMessageForm
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 
 class ShowAllView(ListView):
     '''Create a subclass of ListView to display all mini_fb profiles.'''
@@ -33,27 +35,36 @@ class ShowProfileView(DetailView):
         context['current_time'] = timezone.now()
         return context
     
-class CreateProfileView(LoginRequiredMixin, CreateView):
+class CreateProfileView(CreateView):
     '''A view to create a new profile and save it to the database.'''
     form_class = CreateProfileForm
     template_name = "mini_fb/create_profile_form.html"
-    
-    def form_valid(self, form):
-        self.object = form.save()
-        print(self.object.pk)  # Debugging print statement
-        return super().form_valid(form)
-    
-    def get_success_url(self) -> str:
-        '''Return the URL to redirect to after successfully submitting the form.'''
-        # Redirect to the profile detail page using the newly created profile's pk
-        return reverse('profile', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get the existing context
         context = super().get_context_data(**kwargs)
-        # Add 'current_time' to the context
+        context['user_form'] = UserCreationForm(self.request.POST)
         context['current_time'] = timezone.now()
         return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        user_form = context['user_form']
+
+        if user_form.is_valid():
+            user = user_form.save()
+            username = user_form.cleaned_data.get('username')
+            password = user_form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(self.request, user)
+            form.instance.user = user
+            self.object = form.save()
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
+        
+    def get_success_url(self):
+        return reverse('profile', kwargs={'pk': self.object.pk})
+
     
 class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     '''A view to create a new comment and save it to the database.'''

@@ -1,24 +1,42 @@
 <!-- mini_fb/templates/mini_fb/create_profile_form.html -->
 {% extends 'mini_fb/base.html' %}
-{% block content %}
-    <h2>Create a new profile</h2>
-    <div class="form-container">
-        <form method='POST'>
-            <table class="form-table">
-                {{form.as_table}}
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type='submit' name='Create Profile' value='Create Profile'>
-                        {% csrf_token %}
-                    </td>
-                </tr>
-            </table>
-        </form>
+{% load crispy_forms_tags %}
 
-        <!-- Cancel button redirects to the 'show_all' view -->
-        <form action="{% url 'show_all' %}">
-            <input type='submit' name='Cancel' value='Cancel'>
-        </form>
-    </div>
+{% block content %}
+<div class="form-container">
+    <h2>Create a New Profile and User Account</h2>
+    <form method="post">
+        {% csrf_token %}
+        <h3>User Account Information</h3>
+        {{ user_form.non_field_errors }}
+        {% for field in user_form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <h3>Profile Information</h3>
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit">Create Profile</button>
+    </form>
+
+    <!-- Cancel button -->
+    <form action="{% url 'show_all_profiles' %}">
+        <button type="submit">Cancel</button>
+    </form>
+</div>
 {% endblock %}
