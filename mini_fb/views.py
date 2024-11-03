@@ -67,29 +67,23 @@ class CreateProfileView(CreateView):
 
     
 class CreateStatusMessageView(LoginRequiredMixin, CreateView):
-    '''A view to create a new comment and save it to the database.'''
+    '''A view to create a new status message and save it to the database.'''
     form_class = CreateStatusMessageForm
     template_name = "mini_fb/create_status_form.html"
-    
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+
+    def dispatch(self, request, *args, **kwargs):
+        self.profile = Profile.objects.filter(user=request.user).first()
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        pk = self.kwargs['pk']
-        
-        profile = Profile.objects.get(pk=pk)
-        
-        context['profile'] = profile
+        context['profile'] = self.profile
         context['current_time'] = timezone.now()
         return context
-    
-    def get_login_url(self) -> str:
-        '''Return the URL to the login page.'''
-        return reverse('login')
-    
+
     def form_valid(self, form):
         sm = form.save(commit=False)
-        profile = Profile.objects.get(pk=self.kwargs['pk'])
-        sm.profile = profile
+        sm.profile = self.profile
         sm.save()
         print("StatusMessage saved:", sm)
 
@@ -112,12 +106,13 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
         # Call the parent form_valid method to complete the process
         return super().form_valid(form)
 
-    
-    ## show how the reverse function uses the urls.py to find the URL pattern
-    def get_success_url(self) -> str:
-        '''Return the URL to redirect to after successfully submitting form.'''
-        #return reverse('show_all')
-        return reverse('profile', kwargs={'pk': self.kwargs['pk']})
+    def get_success_url(self):
+        return reverse('profile', kwargs={'pk': self.profile.pk})
+
+    def get_login_url(self) -> str:
+        '''Return the URL to the login page.'''
+        return reverse('login')
+
     
     
 class UpdateProfileView(LoginRequiredMixin, UpdateView):

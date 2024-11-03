@@ -18,7 +18,7 @@
         {{profile.city}}
         </p>
         {% if request.user.is_authenticated and profile in request.user.profile_set.all %}
-            <h3><a href="{% url 'create_status' profile.pk %}">Create a status message</a></h3>
+            <h3><a href="{% url 'create_status' %}">Create a status message</a></h3>
             <h3><a href="{% url 'update_profile'%}">Update profile</a></h3>
             <h3><a href="{% url 'friend_suggestions' %}">View Friend Suggestions</a></h3>
             <h3><a href="{% url 'news_feed' %}">View News Feed</a></h3>
