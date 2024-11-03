@@ -43,11 +43,7 @@ INSTALLED_APPS = [
     "restaurant", # assign4
     "blog", # lecture app
     "mini_fb", # assign5
-    'crispy_forms',
-    'crispy_bootstrap4',
 ]
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
