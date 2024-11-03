@@ -114,20 +114,18 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     form_class = UpdateProfileForm
     template_name = "mini_fb/update_profile_form.html"
     
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_object(self):
+        return Profile.objects.filter(user=self.request.user).first()
+    
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        pk = self.kwargs['pk']
-        
-        profile = Profile.objects.get(pk=pk)
-        
-        context['profile'] = profile
+        context['profile'] = self.object
         context['current_time'] = timezone.now()
         return context
     
     def get_success_url(self) -> str:
         '''Return the URL to redirect to after successfully submitting form.'''
-        return reverse('profile', kwargs={'pk': self.kwargs['pk']})
+        return reverse('profile', kwargs={'pk': self.object.pk})
     
     def get_login_url(self) -> str:
         '''Return the URL to the login page.'''
@@ -171,11 +169,10 @@ class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
 
 class CreateFriendView(LoginRequiredMixin, View):
     def dispatch(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
         other_pk = kwargs.get('other_pk')
-
-        profile = get_object_or_404(Profile, id=pk)
         friend_profile = get_object_or_404(Profile, id=other_pk)
+
+        profile = Profile.objects.filter(user=request.user).first()
 
         profile.add_friend(friend_profile)
 
@@ -184,15 +181,20 @@ class CreateFriendView(LoginRequiredMixin, View):
     def get_login_url(self) -> str:
         '''Return the URL to the login page.'''
         return reverse('login')
+    
 class ShowFriendSuggestionsView(DetailView):
     model = Profile
     template_name = 'mini_fb/friend_suggestions.html'
     context_object_name = 'profile'
+    
+    def get_object(self):
+        return Profile.objects.filter(user=self.request.user).first()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile = self.get_object()
+        profile = self.object
         context['friend_suggestions'] = profile.get_friend_suggestions()
+        context['current_time'] = timezone.now()
         return context
     
 class ShowNewsFeedView(DetailView):
@@ -200,8 +202,12 @@ class ShowNewsFeedView(DetailView):
     template_name = 'mini_fb/news_feed.html'
     context_object_name = 'profile'
 
+    def get_object(self):
+        return Profile.objects.filter(user=self.request.user).first()
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile = self.get_object()
+        profile = self.object
         context['news_feed'] = profile.get_news_feed()
+        context['current_time'] = timezone.now()
         return context

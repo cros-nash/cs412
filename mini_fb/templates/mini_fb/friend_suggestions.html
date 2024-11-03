@@ -12,7 +12,7 @@
             <li>
                 <img src="{{ f.image_url }}" alt="Image associated with friend"  style="width:150px; height:150px; object-fit:cover;"/><br>
                 {{ f.fname }} {{ f.lname }} -
-                <a href="{% url 'add_friend' profile.pk f.pk %}">Add Friend</a>
+                <a href="{% url 'add_friend' f.pk %}">Add Friend</a>
             </li>
         {% endfor %}
     </ul>
