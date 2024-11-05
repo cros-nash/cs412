@@ -1,25 +1,17 @@
-<!-- templates/blog/templates/base.html -->
+<!-- templates/blog/templates/login.html -->
 {% extends 'blog/base.html' %}
 {% block content %}
-    <!-- This basic authentication form works.
-    - need to set "next" to redirect to correct page.
-    -->
-    <h2>Login</h2>
-        <form method="post" action="{% url 'login' %}" >
-            {% csrf_token %}
-            <table>
-                {% for field in form %}
-                <tr>
-                    <th>{{field.name}}:</th>
-                    <td>{{field}}</td>
-                </tr>
-                {% endfor %}
-                <tr>
-                    <td>    
-                        <input type="hidden" name="next" value="{% url 'show_all' %}">
-                        <input type="submit" value="Login">
-                    </td>
-                </tr>
-            </table>
-        </form> 
+<!-- This basic authentication form works.
+- need to set "next" to redirect to correct page.
+-->
+<h1>Login</h1>
+<form method="post" action="{% url 'login' %}" >
+    {% csrf_token %}
+    {{form}}
+    <input type="hidden" name="next" value="{% url 'show_all' %}">
+    <input type="submit" value="Login">
+</form>
+
+<hr>
+Don't have an account? <a href="{% url 'register' %}">Register here</a>.
 {% endblock %}

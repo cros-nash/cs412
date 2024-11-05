@@ -2,7 +2,7 @@
 ## description: the app-specific URLS for the blog application
 
 from django.urls import path
-from .views import ShowAllView, RandomArticleView, ArticlePageView, CreateCommentView, CreateArticleView, UpdateArticleView, DeleteCommentView
+from .views import RegistrationView, ShowAllView, RandomArticleView, ArticlePageView, CreateCommentView, CreateArticleView, UpdateArticleView, DeleteCommentView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -19,4 +19,5 @@ urlpatterns = [
     # authentication views
     path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='show_all'), name='logout'),
+    path('register/', RegistrationView.as_view(), name='register'),
 ]

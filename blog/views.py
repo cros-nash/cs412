@@ -2,12 +2,16 @@
 # description: the logic to handle URL requests
 #from django.shortcuts import render
 from typing import Any
+from django.shortcuts import redirect
 from django.urls import reverse
 from .models import Article, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import CreateArticleForm, CreateCommentForm, UpdateArticleForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 import random
+from django.contrib.auth.forms import UserCreationForm ## NEW
+from django.contrib.auth.models import User ## NEW
+from django.contrib.auth import login # NEW
 
 class ShowAllView(ListView):
     '''Create a subclass of ListView to display all blog articles.'''
@@ -82,7 +86,10 @@ class CreateArticleView(LoginRequiredMixin, CreateView):
     '''A view to create a new Article and save it to the database.'''
     form_class = CreateArticleForm
     template_name = "blog/create_article_form.html"
-    
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login') 
+        
     def form_valid(self, form):
         '''
         Handle the form submission to create a new Article object.
@@ -129,3 +136,30 @@ class DeleteCommentView(DeleteView):
         
         # reverse to show the article page
         return reverse('article', kwargs={'pk':article.pk})
+    
+class RegistrationView(CreateView):
+    '''
+    show/process form for account registration
+    '''
+    template_name = 'blog/register.html'
+    form_class = UserCreationForm
+    def dispatch(self, *args, **kwargs):
+        '''
+        Handle the User creation part of the form submission, 
+        '''
+        # handle the POST:
+        if self.request.POST:
+            # reconstruct the UserCreationForm from the POST data
+            user_form = UserCreationForm(self.request.POST)
+            # create the user and login
+            user = user_form.save()     
+            print(f"RegistrationView.form_valid(): Created user= {user}")   
+            login(self.request, user)
+            print(f"RegistrationView.form_valid(): User is logged in")   
+            
+            # for mini_fb: attach the user to the Profile instance object so that it 
+            # can be saved to the database in super().form_valid()
+            return redirect(reverse('show_all'))
+        
+        # GET: handled by super class
+        return super().dispatch(*args, **kwargs)
