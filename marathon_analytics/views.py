@@ -14,9 +14,9 @@ class ResultsListView(ListView):
         # start with entire queryset
         qs = super().get_queryset().order_by('place_overall')
         # filter results by these field(s):
-        if 'first_name' in self.request.GET:
-            first_name = self.request.GET['first_name']
-            if first_name:
-                qs = qs.filter(first_name=first_name)
+        if 'city' in self.request.GET:
+            city = self.request.GET['city']
+            if city:
+                qs = qs.filter(city__icontains=city)
                 
         return qs
