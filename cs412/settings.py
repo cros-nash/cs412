@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "restaurant", # assign4
     "blog", # lecture app
     "mini_fb", # assign5
-    "marathon_analytics",
+    "marathon_analytics",# lecture app
+    "voter_analytics", # assign 10
 ]
 
 MIDDLEWARE = [
