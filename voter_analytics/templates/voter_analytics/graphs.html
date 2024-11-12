@@ -1,0 +1,41 @@
+<!-- voter_analytics/graphs.html -->
+
+{% extends 'voter_analytics/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% include "voter_analytics/search_graph.html" %}    
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <h1>Voter Data Graphs</h1>
+
+        <div>
+            {{ graph_div_score|safe }}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <div>
+            {{ graph_div_birth_year|safe }}
+        </div>
+
+
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <div>
+            {{ graph_div_elections|safe }}
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}
