@@ -1,0 +1,59 @@
+<!-- finalproject/templates/update_profile.html -->
+{% extends "base.html" %}
+{% load form_tags %}  <!-- Load the custom template tags -->
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Update Profile</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Display form errors -->
+                    {% if user_form.errors or profile_form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Please correct the errors below.</strong>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- User Information Section -->
+                    <div class="mb-4">
+                        <h4 class="mb-3">User Information</h4>
+                        {% for field in user_form %}
+                            <div class="mb-3">
+                                {{ field.label_tag }}
+                                {{ field|add_class:"form-control" }}
+                                {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Profile Information Section -->
+                    <div class="mb-4">
+                        <h4 class="mb-3">Profile Information</h4>
+                        {% for field in profile_form %}
+                            <div class="mb-3">
+                                {{ field.label_tag }}
+                                {{ field|add_class:"form-control" }}
+                                {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="{% url 'profile' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

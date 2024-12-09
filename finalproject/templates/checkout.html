@@ -1,0 +1,43 @@
+<!-- finalproject/templates/checkout.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>Checkout</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Please correct the errors below.</strong>
+                </div>
+            {% endif %}
+            
+            <div class="card">
+                <div class="card-header">
+                    Order Summary
+                </div>
+                <div class="card-body">
+                    <ul class="list-group mb-3">
+                        {% for order_item in order.order_items %}
+                            <li class="list-group-item d-flex justify-content-between lh-sm">
+                                <div>
+                                    <h6 class="my-0">{{ order_item.item.title }}</h6>
+                                    <small class="text-muted">Quantity: {{ order_item.quantity }}</small>
+                                </div>
+                                <span class="text-muted">${{ order_item.total_price }}</span>
+                            </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><strong>Total (USD)</strong></span>
+                            <strong>${{ order.total_amount }}</strong>
+                        </li>
+                    </ul>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Confirm and Place Order</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
