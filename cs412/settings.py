@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "widget_tweaks",
     "hw", # lecture app
     "quotes", # assign3
     "formdata", # lecture app
@@ -47,6 +46,7 @@ INSTALLED_APPS = [
     "marathon_analytics",# lecture app
     "voter_analytics", # assign 10
     "finalproject", # final project
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
