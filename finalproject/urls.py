@@ -1,4 +1,6 @@
-# urls.py
+# File: urls.py
+# Author: Crosby Nash (crosbyn@bu.edu), 12/26/2024
+# Defines the URL patterns for the marketplace platform, mapping URLs to their corresponding views.
 from django.urls import path
 from . import views
 
@@ -17,6 +19,7 @@ urlpatterns = [
     
     # Items
     path('items/', views.ItemListView.as_view(), name='item_list'),
+    # '<int:pk>' is a path converter that captures the primary key (ID) of the item.
     path('items/<int:pk>/', views.ItemDetailView.as_view(), name='item_detail'),
     path('items/create/', views.ItemCreateView.as_view(), name='item_create'),
     path('items/<int:pk>/update/', views.ItemUpdateView.as_view(), name='item_update'),

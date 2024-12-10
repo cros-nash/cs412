@@ -1,3 +1,7 @@
+# File: apps.py
+# Author: Crosby Nash (crosbyn@bu.edu), 11/26/2024
+# Configures the application settings for finalproject.
+
 from django.apps import AppConfig
 
 
