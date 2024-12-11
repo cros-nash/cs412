@@ -74,7 +74,6 @@ class Discount(models.Model):
     expiration_date = models.DateTimeField(null=True, blank=True)
     usage_limit = models.PositiveIntegerField(null=True, blank=True)
     used_count = models.PositiveIntegerField(default=0)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, blank=True)
 
     def is_valid(self):
         """
